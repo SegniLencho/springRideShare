@@ -6,6 +6,7 @@ import guru.springframework.domain.Post;
 /**
  * Created by OD on 6/18/2017.
  */
+
 public interface PostService {
 
     Iterable<Post> listAllPost();

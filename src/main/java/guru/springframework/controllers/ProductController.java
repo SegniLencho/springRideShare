@@ -1,30 +1,36 @@
 package guru.springframework.controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import guru.springframework.domain.*;
 import guru.springframework.repositories.PostDao;
 import guru.springframework.services.PostService;
 import guru.springframework.services.ProductService;
+import guru.springframework.services.UserService;
+import javafx.geometry.Pos;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Controller
+@SessionAttributes(names = "name")
 public class ProductController {
 
     private ProductService productService;
- private PostService postService;
- private PostDao dao;
+    private PostService postService;
+    private UserService userService;
 
- @Autowired
-    public void setDao(PostDao dao) {
-        this.dao = dao;
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Autowired
@@ -63,35 +69,66 @@ public class ProductController {
         return "productform";
     }
 
+    @RequestMapping(value = "product", method = RequestMethod.POST)
+    public String saveProduct(Product product) {
+
+        //productService.saveProduct(product);
+
+        return "redirect:/product/" + product.getId();
+    }
+
+    //Ride application
     @RequestMapping("/askRide")
     public String veiwride(Model model) {
         model.addAttribute("post", new Post());
         return "askRide";
     }
 
+
     @RequestMapping(value = "/askRide", method = RequestMethod.POST)
-    public String createridePost(Post post1) {
-//        model.addAttribute("posts", new  Post());
+    public String createridePost(Post post1, Model model) {
         Date date = new Date(12 / 12 / 1234);
         post1.setDateCreated(date);
-        post1.setPostText("some text");
+        post1.setPostText(post1.getPostText());
         post1.setPostType("d");
-        Post post12=new Post("sefni","Name of k");
-
-//        Iterable<Post> daopos=dao.findAll();
-//        System.out.println(daopos.iterator().next().getId()+"----<");
-        Post post=postService.savePost(post12);
-        System.out.println("Post if "+ post.getPostText());
-
+        Post post = postService.savePost(post1);
         System.out.println("Post is created Successfully------<>");
-        return "askRide";
+        model.addAttribute("posts", postService.listAllPost());
+        return "redirect:/post";
     }
 
-    @RequestMapping(value = "product", method = RequestMethod.POST)
-    public String saveProduct(Product product) {
+    //Display list of post
+    @RequestMapping(value = "/post", method = RequestMethod.GET)
+    public String getallPost(Post post, Model model) {
+        model.addAttribute("posts", postService.listAllPost());
+        System.out.println("Returning Allpost:");
+        return "posts";
+    }
+    @RequestMapping("/register")
+    public String signUp(User user,Address address, Model model) {
+//        System.out.println(user.getFirstName()+ "---First Name is gotten");
+        model.addAttribute("user", new User());
+        model.addAttribute("address",new Address());
+        return "register";
+    }
 
-        productService.saveProduct(product);
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String createUser(User user, Address address, ModelMap modelMap) {
+        modelMap.addAttribute("user",user);
+        modelMap.addAttribute("address",address);
+        user.setAddress(address);
 
-        return "redirect:/product/" + product.getId();
+      List<Post> posts=new ArrayList<Post>();
+        posts.add(new Post());
+        posts.add(new Post());
+
+        user.setPosts(posts);
+
+        userService.saveUser(user);
+        System.out.println("USer registered successfully-----END" +user.getUsername());
+        modelMap.addAttribute("name",user.getUsername());
+
+
+        return "redirect:/post";
     }
 }

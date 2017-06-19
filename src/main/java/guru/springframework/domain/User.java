@@ -1,55 +1,51 @@
 package guru.springframework.domain;
 
+import org.springframework.data.annotation.Persistent;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
+@Entity
 public class User {
-
+	@Id
+	@GeneratedValue
+	private Integer id;
 	private String firstName;
 	private String lastName;
 	private String gender;
 	private int birthDate;
 	private String email;
-	private Date dateUpdated;
-	private Date dateCreated;
-	private String city;
-	private String state;
-	private String street;
 	private String password;
 	private String username;
-	private int zipcode;
-	private List<Post> post;
-	private List<Comment> comment;
-	private List<Like> like;
-	private int userId;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Address address;
+	@OneToMany(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "person_id")
+	private List<Post> posts;
 
-	
-	
-	public int getUserId() {
-		return userId;
-	}
 
 	public User() {
-
+	}
+	public Address getAddress() {
+		return address;
 	}
 
-	public User(String firstName, String lastName, String gender, int birthDate, String email, String city,
-			String state, String street, int zipcode, String password, String username) {
-
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.gender = gender;
-		this.birthDate = birthDate;
-		this.email = email;
-		this.city = city;
-		this.state = state;
-		this.street = street;
-		this.zipcode = zipcode;
-		this.password = password;
-		this.username = username;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
+
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 
 	public String getFirstName() {
 		return firstName;
@@ -106,111 +102,12 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public Date getDateUpdated() {
-		return dateUpdated;
+	public List<Post> getPosts() {
+		return posts;
+	}
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 
-	public void setDateUpdated(Date dateUpdated) {
-		this.dateUpdated = dateUpdated;
-	}
 
-	public Date getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public int getZipcode() {
-		return zipcode;
-	}
-
-	public void setZipcode(int zipcode) {
-		this.zipcode = zipcode;
-	}
-
-	public List<Post> getPost() {
-		return post;
-	}
-
-	public void addPost(Post post) {
-		this.post = new ArrayList<Post>();
-		this.post.add(post);
-	}
-
-	public List<Comment> getComment() {
-		return comment;
-	}
-
-	public void addComment(Comment comment) {
-		this.comment = new ArrayList<Comment>();
-		this.comment.add(comment);
-	}
-
-	public List<Like> getLike() {
-		return like;
-	}
-
-	public void addLike(Like like) {
-		this.like = new ArrayList<Like>();
-		this.like.add(like);
-	}
-
-//	public int login(String username, String password) {
-//		DataAcess dataaccess = new DataAcess();
-//		return dataaccess.login(username, password);
-//	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-		
-	}
-	
-//	public void register(String firstName, String lastName, String gender, int birthDate, String email, String city,
-//			String state, String street, int zipcode, String password, String username) {
-//		DataAcess.registerUser(firstName, lastName, gender, birthDate, email, city, state, street, zipcode, password,
-//				username);
-//	}
-	
-//	public void updateProfile( int userid,String firstName, String lastName, String gender, int birthDate, String email, String city,
-//			String state, String street, int zipcode, String password, String username){
-//		DataAcess.updateProfile(userid,firstName, lastName, gender,
-//				birthDate, email, city, state, street, zipcode, password, username);
-//	}
-//
-//	public User getUserData(int userid){
-//
-//    		return DataAcess.getUserData(userid);
-//
-//	}
-
-//	public User getUserData(String username) {
-//		return DataAcess.getUserData(username);
-//	}
 }

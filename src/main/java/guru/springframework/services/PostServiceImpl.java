@@ -25,11 +25,18 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostById(Integer id) {
-        return null;
+        return postDao.findOne(id);
     }
 
     @Override
     public Post savePost(Post post) {
         return postDao.save(post);
     }
+
+    @Override
+    public void deletePost(Integer post) {
+         postDao.delete(post);
+    }
+
+
 }

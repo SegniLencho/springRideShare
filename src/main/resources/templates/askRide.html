@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-    <title>Create Blog</title>
+    <title>Ride Share</title>
 
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
@@ -11,13 +11,13 @@
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 
     <div>
-        <form class="form-horizontal" th:object="${post}" th:action="@{/askRide}" method="post">
-            <input type="hidden" th:field="*{id}"/>
+        <form class="form-horizontal"  th:action="@{/askRide}" method="POST">
+            <!--<input type="hidden" th:field="${id}"/>-->
             <!--<input type="hidden" th:field="*{version}"/>-->
             <div class="form-group">
                 <label class="col-sm-2 control-label"></label>
                 <div class="col-sm-8">
-                        <textarea class="form-control" placeholder="Post here!" th:field="*{postText}"></textarea>
+                    <input type="text" class="form-control"  modelAttribute="post" th:field="${post.postText}"/>
                 </div>
             </div>
 

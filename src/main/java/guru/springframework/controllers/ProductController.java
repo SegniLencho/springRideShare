@@ -44,38 +44,24 @@ public class ProductController {
     }
 
 
-    @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public String list(Model model) {
-        model.addAttribute("products", productService.listAllProducts());
-        System.out.println("Returning rpoducts:");
-        return "products";
+
+
+
+    //Edit post
+    @RequestMapping("post/edit/{id}")
+    public String editpost(@PathVariable Integer id, Model model) {
+        Post post=postService.getPostById(id);
+        postService.savePost(post);
+        model.addAttribute("post", postService.getPostById(id));
+        return "posts";
+    }
+    //Delete post
+    @RequestMapping("post/delete/{id}")
+     public String deletepost(@PathVariable Integer id) {
+       postService.deletePost(id);
+        return "redirect:/post";
     }
 
-    @RequestMapping("product/{id}")
-    public String showProduct(@PathVariable Integer id, Model model) {
-        model.addAttribute("product", productService.getProductById(id));
-        return "productshow";
-    }
-
-    @RequestMapping("product/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model) {
-        model.addAttribute("product", productService.getProductById(id));
-        return "productform";
-    }
-
-    @RequestMapping("product/new")
-    public String newProduct(Model model) {
-        model.addAttribute("product", new Product());
-        return "productform";
-    }
-
-    @RequestMapping(value = "product", method = RequestMethod.POST)
-    public String saveProduct(Product product) {
-
-        //productService.saveProduct(product);
-
-        return "redirect:/product/" + product.getId();
-    }
 
     //Ride application
     @RequestMapping("/askRide")
@@ -87,12 +73,8 @@ public class ProductController {
 
     @RequestMapping(value = "/askRide", method = RequestMethod.POST)
     public String createridePost(Post post1, Model model) {
-        Date date = new Date(12 / 12 / 1234);
-        post1.setDateCreated(date);
-        post1.setPostText(post1.getPostText());
-        post1.setPostType("d");
-        Post post = postService.savePost(post1);
-        System.out.println("Post is created Successfully------<>");
+            postService.savePost(post1);
+       System.out.println("Post is created Successfully------<>");
         model.addAttribute("posts", postService.listAllPost());
         return "redirect:/post";
     }
@@ -104,14 +86,15 @@ public class ProductController {
         System.out.println("Returning Allpost:");
         return "posts";
     }
+
+    //Create User
     @RequestMapping("/register")
     public String signUp(User user,Address address, Model model) {
-//        System.out.println(user.getFirstName()+ "---First Name is gotten");
         model.addAttribute("user", new User());
         model.addAttribute("address",new Address());
         return "register";
     }
-
+    //Create User
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String createUser(User user, Address address, ModelMap modelMap) {
         modelMap.addAttribute("user",user);

@@ -15,6 +15,7 @@ public interface PostService {
 
     Post savePost(Post post);
 
+    public void deletePost(Integer postid);
 
 
 

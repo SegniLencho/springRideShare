@@ -1,11 +1,10 @@
-package guru.springframework.domain;
-
-import org.springframework.data.annotation.Persistent;
+package com.ride.springframework.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -20,15 +19,36 @@ public class User {
 	private String email;
 	private String password;
 	private String username;
+@OneToMany
+private List<Post> posts;
 	@OneToOne(cascade = CascadeType.PERSIST)
-	private Address address;
-	@OneToMany(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "person_id")
-	private List<Post> posts;
-
+	@JoinColumn(name = "address_id")
+	private Address address;;
+@OneToMany
+private List<Comment> comments;
+@ManyToMany
+@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+private Set<Role> roles;
 
 	public User() {
 	}
+
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
 	public Address getAddress() {
 		return address;
 	}
@@ -36,7 +56,6 @@ public class User {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-
 
 	public Integer getId() {
 		return id;
@@ -102,12 +121,27 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public List<Post> getPosts() {
-		return posts;
-	}
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
+
+			public Set<Role> getRole() {
+		return roles;
 	}
 
+	public void setRole(Set<Role> role) {
+		this.roles = role;
+	}
 
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", gender='" + gender + '\'' +
+				", birthDate=" + birthDate +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", username='" + username + '\'' +
+
+				'}';
+	}
 }

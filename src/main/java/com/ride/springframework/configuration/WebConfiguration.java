@@ -1,4 +1,4 @@
-package guru.springframework.configuration;
+package com.ride.springframework.configuration;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

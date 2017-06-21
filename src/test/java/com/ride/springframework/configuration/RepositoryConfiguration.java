@@ -1,4 +1,4 @@
-package guru.springframework.configuration;
+package com.ride.springframework.configuration;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

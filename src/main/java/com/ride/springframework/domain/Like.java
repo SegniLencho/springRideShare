@@ -1,4 +1,4 @@
-package guru.springframework.domain;
+package com.ride.springframework.domain;
 
 import java.time.LocalDate;
 

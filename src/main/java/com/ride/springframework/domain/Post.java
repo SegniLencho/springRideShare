@@ -1,4 +1,6 @@
-package guru.springframework.domain;
+package com.ride.springframework.domain;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,14 +12,34 @@ public class Post {
 @Id
 @GeneratedValue
 	private Integer Id;
+   @NotEmpty
 	private String postText;
 	private String postType;
 	private Date dateCreated;
+	@ManyToOne
+	@JoinColumn(name = "person_id")
+	private User user;
+	@OneToMany(mappedBy = "post")
+	private List<Comment> comments;
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	public Post() {
 	}
 
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 
 	public Integer getId() {
 		return Id;

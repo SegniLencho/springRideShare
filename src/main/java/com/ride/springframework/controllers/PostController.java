@@ -17,6 +17,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 @Controller
@@ -30,16 +35,18 @@ public class PostController {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
+
     @Autowired
     public void setPostService(PostService postService) {
         this.postService = postService;
     }
+
     //Edit post
     @RequestMapping("post/edit/{id}")
-    public String editpost(@PathVariable Integer id,Post post, ModelMap model) {
+    public String editpost(@PathVariable Integer id, Post post, ModelMap model) {
         model.addAttribute("post", postService.getPostById(id));
-        model.addAttribute("ids",id);
-        System.out.println("Post id  is"+ id);
+        model.addAttribute("ids", id);
+        System.out.println("Post id  is" + id);
         System.out.println(post);
         return "posts";
     }
@@ -60,15 +67,21 @@ public class PostController {
 
 
     @RequestMapping(value = "/reloadPost", method = RequestMethod.POST)
-    public String createridePost(Post post1,ModelMap model) {
+    public String createridePost(Post post1, ModelMap model) {
         //  THIS IS ABOUT CREATING POST NOT CREATING NEW USER sO USER MUST BE UPDATED
-        Post post=(Post)model.get("post");
-        System.out.println("post id is=====> if tih" +post);
-        User user=(User)model.get("name");
+        Post post = (Post) model.get("post");
+
+        User user = (User) model.get("name");
         post1.setUser(user);
 
-        System.out.println("This user is "+ user.getId());
+        if (post1.getPostType() == null)
+            post1.setPostType("askRide");
 
+
+        //set date for post
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calobj = Calendar.getInstance();
+        post1.setDateCreated(calobj.getTime());
         postService.savePost(post1);
         System.out.println("Update is Done ! ----->");
         model.addAttribute("posts", postService.listAllPost());
@@ -78,34 +91,46 @@ public class PostController {
 
     //Display list of post
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String getallPost(Post post,Comment comment, ModelMap model,Principal principal) {
-        comment=new Comment();
-        comment.setComment("");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userdetails=(UserDetails) auth.getPrincipal();
+    public String getallPost(Post post, Comment comment, ModelMap model, Principal principal) {
 
-     User user=userService.findByUsername(userdetails.getUsername());
-        model.addAttribute("name",user);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userdetails = (UserDetails) auth.getPrincipal();
+        Post postwithComment = new Post();
+
+        for (Post p : postService.listAllPost()) {
+            List<Comment> commentList = new ArrayList<>();
+
+            for (Comment c : postService.findcommentByPostId(p)) {
+                commentList.add(c);
+            }
+            postwithComment.setComments(commentList);
+        }
+
+        //
+// System.out.println("Comment "+);
+//
+
+        User user = userService.findByUsername(userdetails.getUsername());
+        model.addAttribute("name", user);
         model.addAttribute("posts", postService.listAllPost());
-        model.addAttribute("comment",comment);
+
+        model.addAttribute("comment", new Comment());
         return "posts";
     }
-
 
 
     //Lists of Asked for Ride
     @RequestMapping(value = "/askedRide", method = RequestMethod.GET)
     public String askedRide(Post post, ModelMap model) {
-        String post_type="askRide";
+        String post_type = "askRide";
         model.addAttribute("posts", postService.findByPostType(post_type));
-        // User users=userService.findByUsernameAndPassword("admin","admin");
-        ///   System.out.println(users.toString());
         return "askedRide";
     }
+
     //Lists of offered Ride
     @RequestMapping(value = "/offeredRide", method = RequestMethod.GET)
     public String offeredRide(Post post, ModelMap model) {
-        String post_type="giveRide";
+        String post_type = "giveRide";
         model.addAttribute("posts", postService.findByPostType(post_type));
         return "offeredRide";
     }
@@ -113,8 +138,7 @@ public class PostController {
     //Lists of Post Posted By Owner
     @RequestMapping(value = "/myPost", method = RequestMethod.GET)
     public String myPost(Post post, ModelMap model) {
-        User user=(User) model.get("name");
-        System.out.println("===User Still available on Session====>"+user.toString());
+        User user = (User) model.get("name");
         model.addAttribute("posts", postService.listOfPost(user));
         return "myPost";
 
@@ -123,22 +147,53 @@ public class PostController {
 //create Comment
 
     @RequestMapping(value = "/createcomment", method = RequestMethod.POST)
-    public String createUser(Post post, ModelMap modelMap) {
-        //    comment.setPost_id(post);
-        //comment.setPost(post);
-        System.out.println("Post Id is=== "+post.getId());
-        System.out.println("Received comment is====="+post.getPostText());
-        System.out.println("Received Post Id is  is====="+ post.getId());
-//    Comment comment1 = postService.saveComment(comment);
-        //  modelMap.addAttribute("name", users);
+    public String createComment(@RequestParam(name = "id") int postId, @RequestParam(name = "comment") String content, ModelMap modelMap) {
+        User user = (User) modelMap.get("name");
+        Post post1 = postService.getPostById(postId);
+        Comment comment = new Comment();
+        comment.setComment(content);
+        comment.setPost(post1);
+        comment.setUser(user);
+        //set time for comment
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calobj = Calendar.getInstance();
+        post1.setDateCreated(calobj.getTime());
+        comment.setDateCreated(calobj.getTime());
+        comment.setDateUpdated(calobj.getTime());
+        Comment comment1 = postService.saveComment(comment);
         return "redirect:/post";
     }
+
     //Create User
     @RequestMapping(value = "/givecomment", method = RequestMethod.GET)
     public String signUp(User user, Address address, ModelMap model) {
         model.addAttribute("user", new User());
         model.addAttribute("address", new Address());
         return "register";
+    }
+
+    //This is big issue about comment
+    @RequestMapping("post/seeComments/{id}")
+    public String displayComment(@PathVariable Integer id, Post post, ModelMap model) {
+
+        Post mypost = postService.getPostById(id);
+        List<Comment> commentList = postService.findcommentByPostId(mypost);
+        mypost.setComments(commentList);
+        model.addAttribute("posts", mypost);
+        model.addAttribute("ids", id);
+  return "displayComment";
+    }
+
+    @RequestMapping("post/deleteComment/{id}")
+    public String deleteComment(@RequestParam(name = "id") int commentId, Post post, ModelMap model) {
+        System.out.println("Complire Reaches HERE!");
+        Comment mycomment=postService.finduserBycommentId(commentId);
+        User user=mycomment.getUser();
+        User loggedInuser = (User) model.get("name");
+        System.out.println("User Who comment this comment is  ==>"+user.getFirstName());
+        System.out.println("Current User from session i s ==>"+loggedInuser.getFirstName());
+
+        return "displayComment";
     }
 
 

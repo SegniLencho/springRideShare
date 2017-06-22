@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableAutoConfiguration
-@EntityScan(basePackages = {"guru.springframework.domain"})
-@EnableJpaRepositories(basePackages = {"guru.springframework.repositories"})
+@EntityScan(basePackages = {"com.ride.springframework.domain"})
+@EnableJpaRepositories(basePackages = {"com.ride.springframework.repositories"})
 @EnableTransactionManagement
 public class RepositoryConfiguration {
 }

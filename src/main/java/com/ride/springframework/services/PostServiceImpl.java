@@ -16,7 +16,7 @@ import java.util.List;
  * Created by OD on 6/18/2017.
  */
 @Service
-@org.springframework.transaction.annotation.Transactional
+@Transactional(Transactional.TxType.REQUIRES_NEW)
 public class PostServiceImpl implements PostService {
 
     @Resource
@@ -54,14 +54,21 @@ private CommentDao commentDao;
         return postDao.findAllByUser(user);
     }
 
-    @Override
-    public void updatePost(Integer id, String post) {
-         postDao.updatePost(id,post);
-    }
+
 
     @Override
     public Comment saveComment(Comment comment) {
         return commentDao.save(comment);
+    }
+
+    @Override
+    public List<Comment> findcommentByPostId(Post post) {
+        return commentDao.findByPostEquals(post);
+    }
+
+    @Override
+    public Comment finduserBycommentId(Integer id) {
+        return commentDao.findByIdEquals(id);
     }
 
 

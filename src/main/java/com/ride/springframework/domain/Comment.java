@@ -1,21 +1,29 @@
 package com.ride.springframework.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Comment {
 	@Id
 	@GeneratedValue
-	private Integer Id;
+	private Integer id;
+	@NotEmpty
 	private String comment;
-	private LocalDate dateCreated;
-	private LocalDate dateUpdated;
+	private Date dateCreated;
+	private Date dateUpdated;
 	@ManyToOne
 	private Post post;
-@ManyToOne
-private User user;
+	@ManyToOne
+	private User user;
+
+	public Comment() {
+
+	}
 
 	public Post getPost() {
 		return post;
@@ -34,22 +42,11 @@ private User user;
 	}
 
 	public Integer getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		this.Id = id;
-	}
-
-	public Comment() {
-	}
-
-	public Post getPost_id() {
-		return post;
-	}
-
-	public void setPost_id(Post post_id) {
-		this.post = post_id;
+		this.id = id;
 	}
 
 	public String getComment() {
@@ -60,27 +57,25 @@ private User user;
 		this.comment = comment;
 	}
 
-	public LocalDate getDateCreated() {
+	public Date getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(LocalDate dateCreated) {
+	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public LocalDate getDateUpdated() {
+	public Date getDateUpdated() {
 		return dateUpdated;
 	}
 
-	public void setDateUpdated(LocalDate dateUpdated) {
+	public void setDateUpdated(Date dateUpdated) {
 		this.dateUpdated = dateUpdated;
 	}
 
-
 	@Override
 	public String toString() {
-		return "Comment [commentId=" + Id + ", comment=" + comment + ", dateCreated=" + dateCreated
-				+ ", dateUpdated=" + dateUpdated   + "]";
+		String space = "  \n .";
+		return String.format("%s \n %s \n ", comment, space);
 	}
-	
 }

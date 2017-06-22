@@ -1,6 +1,7 @@
 package com.ride.springframework.domain;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,11 +35,18 @@ public class Post {
 	}
 
 	public List<Comment> getComments() {
-		return comments;
+		List<Comment>commentList=new ArrayList<>();
+		for(Comment c:comments){
+			Comment c1=new Comment();
+			c1.setComment(c.getComment());
+			commentList.add(c1);
+		}
+		return commentList;
 	}
 
+
 	public void setComments(List<Comment> comments) {
-		this.comments = comments;
+this.comments=comments;
 	}
 
 	public Integer getId() {

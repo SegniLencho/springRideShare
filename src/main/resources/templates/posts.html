@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+
+<head lang="en">
+
+    <title>Ride Share</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+    <div class="form-group">
+        <div class="col-sm-2">
+
+            <p th:text="${name.firstName}"></p>
+            <input type="hidden" th:field="*{name.id}"/>
+            <td><a th:href="${'/profile/edit/' + name.id}">Edit Profile</a></td>
+
+            <!--<a href="#"><p th:text="${name.id}"></p></a>-->
+
+            <div th:if="${name}">
+                <form id="logoutForm" th:action="@{/logout}" method="post">
+                    <input type="submit" class="btn btn-danger" value="Logout"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" th:object="${post}" th:action="@{/reloadPost}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <!--<input type="hidden" th:field="*{version}"/>-->
+        <div class="form-group">
+            <div class="col-sm-8">
+                <textarea class="form-control" placeholder="Post here!" required="required" th:field="*{postText}"></textarea>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-2">
+                    <h5>
+                        <p></p>
+                    </h5>
+                </div>
+                <div class="col-sm-8">
+                    Ask For Ride <input type="radio" name="rideoption" th:value="askRide"
+                                        th:field="*{postType}"/>
+                    Give Ride <input type="radio" name="rideoption" th:value="giveRide" th:field="*{postType}"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-9 control-label"></label>
+                <div class="col-sm-1">
+                    <button type="submit" class="btn btn-success">Post</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="form-group">
+
+
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-8">
+            <table class="table table-striped">
+                <form th:each="post : ${posts}" class="form-horizontal" th:action="@{/createcomment}" method="post">
+                    <tr>
+
+                        <td></td>
+                        <td th:text="${post.postText}"></td>
+                        <!--<td th:text="${post.type}">descirption</td>-->
+                       <i> <td th:text="${post.dateCreated}"></td></i>
+                        <!--<td><a th:href="${ '/posts/' + post.id}">View</a></td>-->
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <!--To display List of comment under given post-->
+                    <tr>
+                        <!--<td colspan="9" th:text="${post.comments}"></td>-->
+                        <td colspan="4"><a th:href="${'/post/seeComments/' + post.id}">See Comments</a></td>
+
+                        <!--<td colspan="5" th:text="${post.comments}"></td>-->
+
+                        <td colspan="1">
+                            <!--<button type="submit" class="btn btn-default">Comment</button>-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="hidden" name="id" th:value="${post.id}"/></td>
+
+                        <td colspan="9">
+                            <textarea class="form-control" required="required" th:field="*{comment.comment}"
+                                      placeholder="comment"></textarea>
+
+                        </td>
+                        <td colspan="1">
+                            <button type="submit" class="btn btn-default">Comment</button>
+                        </td>
+                    </tr>
+                </form>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

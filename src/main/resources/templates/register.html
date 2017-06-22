@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Ride Share</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+
+
+
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+        <form class="form-horizontal" th:action="@{/register}" method="POST">
+                <div class= "col-sm-9">
+                    <fieldset>
+                        <legend> <h3 th:text="#{personalInformation}"></h3></legend>
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label" th:text="#{firstName}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control"  required="required" th:field="*{user.firstName}"
+                                       id="firstname" name="firstname" placeholder="Enter First Name"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label"  th:text="#{lastName}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" required="required" th:field="*{user.lastName}" id="lastname" name="lastname" placeholder="Enter Last Name" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender" class="col-sm-2 control-label" th:text="#{gender}"></label>
+                            <div class="col-sm-5">
+
+                                <input type="text" class="form-control" required="required"  th:field="*{user.gender}" id="gender" name="gender" placeholder="gender" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bdate" class="col-sm-2 control-label" th:text="#{birthYear}"></label>
+                            <div class="col-sm-5" id="byear">
+                                <!--<td th:if="${#fields.hasErrors('year')}" th:errors="*{year}">year-->
+                                    <!--Error</td>-->
+                                <input type="text" class="form-control" required="required" pattern="\d{1,2}/\d{1,2}/\d{4}" th:field="*{user.birthDate}" id="bdate" name="bdate" placeholder="YYYY" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label" th:text="#{email}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control"  required="required" th:field="*{user.email}" id="email" name="email" placeholder="xyz@hotmail.com" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label" th:text="#{userName}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" required="required"  th:field="*{user.username}" id="username" name="username"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label" th:text="#{password}"></label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control" required="required" th:field="*{user.password}" id="password" name="password"/>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend> <h3 th:text="#{addressInformation}"></h3></legend>
+                        <div class="form-group">
+                            <label for="street" class="col-sm-2 control-label" th:text="#{street}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" required="required" th:field="*{address.street}"  id="street" name="street"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city" class="col-sm-2 control-label" th:text="#{city}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" required="required" th:field="*{address.city}" id="city" name="city"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zipcode" class="col-sm-2 control-label" th:text="#{zipCode}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" required="required" id="zipcode" th:field="*{address.zipcode}"  name="zipcode"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="state" class="col-sm-2 control-label" th:text="#{state}"></label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" required="required" id="state"  th:field="*{address.state}"  name="state"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4">
+                                <button type="submit" class="btn btn-success"><h4 th:text="#{register}"></h4></button>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+</div>
+        </form>
+
+</div>
+
+
+</body>
+</html>

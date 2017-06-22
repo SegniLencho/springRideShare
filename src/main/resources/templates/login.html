@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Ride Share</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#locales").change(function () {
+                var selectedOption = $('#locales').val();
+                if (selectedOption != ''){
+                    window.location.replace('international?lang=' + selectedOption);
+                }
+            });
+        });
+    </script>
+    <meta charset="UTF-8"/>
+   <th:block th:include="fragments/headerinc :: head"></th:block>
+</head>
+<body>
+<div class="container">
+ <th:block th:include="fragments/header :: header"></th:block>
+
+    <form class="form-horizontal" th:object="${user}" th:action="@{/login}" method="post">
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label></label>
+            </div>
+
+            <div class="col-sm-8">
+                <h4 th:text="#{rideshare}"></h4>
+                <span th:text="#{lang.change}"></span>:
+                <select id="locales">
+                    <option value=""></option>
+                    <option value="en" th:text="#{lang.eng}"></option>
+                    <option value="fr" th:text="#{lang.fr}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label></label>
+            </div>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" th:field="*{username}" required="required" placeholder="User Name"/>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2">
+               <label></label>
+            </div>
+
+            <div class="col-sm-8">
+                <input type="password" class="form-control" th:field="*{password}" required="required" placeholder="password" />
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-9 control-label"></label>
+                <div class="col-sm-1">
+                    <button type="submit" class="btn btn-success"><h5 th:text="#{login}"></h5></button>
+                </div>
+            </div>
+        </div>
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">
+                Invalid username and password.
+            </div>
+        </div>
+        <div th:if="${param.logout}">
+            <div class="alert alert-info">
+                You have been logged out.
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <h5>
+                    <!--<p th:text="${name}"></p>-->
+                </h5>
+            </div>
+
+            <div class="col-sm-8">
+                <h3><a href="#" th:href="@{/register}"><h3 th:text="#{signup}"></h3></a></h3>
+            </div>
+        </div>
+
+
+    </form>
+
+
+</div>
+
+</body>
+</html>

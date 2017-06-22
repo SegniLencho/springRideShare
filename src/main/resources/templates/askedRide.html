@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Ride Share</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div class="form-group">
+        <div class="col-sm-2">
+
+            <p th:text="${name.firstName}"></p>
+
+            <!--<a href="#"><p th:text="${name.id}"></p></a>-->
+
+            <div th:if="${name}">
+                <form id="logoutForm" th:action="@{/logout}" method="post">
+                    <input type="submit" class="btn btn-danger" value="Logout"/>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+
+    <form class="form-horizontal" th:object="${post}" th:action="@{/askRide}" method="post">
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                <h5>
+                    <!--<p th:text="${name}"></p>-->
+                </h5>
+            </div>
+
+            <div class="col-sm-8">
+                <textarea class="form-control" placeholder="Post here!" required="required" th:field="*{postText}"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+
+                <div class="col-sm-8 col-sm-push-4">
+                    Ask For Ride <input type="radio" name="rideoption"  th:value="askRide" th:field="*{postType}"/>
+                    Give Ride <input type="radio" name="rideoption" th:value="giveRide" th:field="*{postType}"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-9 control-label"></label>
+                <div class="col-sm-1">
+                    <button type="submit" class="btn btn-success">Post</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-5 control-label"></label>
+                <div class="col-sm-4">
+                    <h4>List of Asked Ride </h4>
+                </div>
+            </div>
+        </div>
+
+
+
+    </form>
+    <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-8">
+            <table class="table table-striped">
+
+                <tr th:each="post : ${posts}">
+                    <!--<td th:text="${post.id}"><a href="/posts/${post.id}">Id</a></td>-->
+                    <td th:text="${post.postText}">Product Id</td>
+                    <!--<td th:text="${post.type}">descirption</td>-->
+                    <td th:text="${post.dateCreated}">price</td>
+                    <!--<td><a th:href="${ '/posts/' + post.id}">View</a></td>-->
+                    <td></td>
+                    <td></td>
+                <tr><td colspan="6"><textarea class="form-control" placeholder="comment"></textarea>
+                </td>
+                <td colspan="1">
+                    <button type="submit" class="btn btn-default">Comment</button>
+                </td></tr>
+
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -17,7 +17,7 @@ public class SpringBootWebApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootWebApplication.class, args);
 
-
+//Home Pc Configuration
     }
     @Bean
     public SessionLocaleResolver localeResolver() {
